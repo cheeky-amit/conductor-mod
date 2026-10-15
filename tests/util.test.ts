@@ -39,9 +39,9 @@ test('a failed hook leaves one log row with credentials masked and the reason cu
   expect(failureLine('tool.call', new Error('x'.repeat(200))).length).toBe('tool.call failed: '.length + 80)
 })
 
-test('the render failure row masks credentials and fits the pane, 33 cells at least', () => {
+test('the render failure row masks credentials and fits the pane, 37 cells at least', () => {
   const err = new Error('boom API_TOKEN=abcdefghijklmnop1234 '.repeat(4))
-  expect(renderFailure(err, 120)).toMatch(/^conductor render failed: boom API_TOKEN=••• boom API_TOKEN=•••/)
+  expect(renderFailure(err, 120)).toMatch(/^conductor-mod render failed: boom API_TOKEN=••• boom API_TOKEN=•••/)
   expect(renderFailure(err, 120)).not.toMatch(/abcdefghijklmnop1234/)
-  for (const cols of [10, 40, 60, 80, 120]) expect(renderFailure(err, cols).length).toBeLessThanOrEqual(Math.max(33, cols))
+  for (const cols of [10, 40, 60, 80, 120]) expect(renderFailure(err, cols).length).toBeLessThanOrEqual(Math.max(37, cols))
 })

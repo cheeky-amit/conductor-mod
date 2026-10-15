@@ -29,23 +29,23 @@ import { activeRun, endRunByText, finishRunAgent, loopPhase, runRefOf, startRun,
 import { DEFAULT_MAIN, DEFAULT_ROSTER, DEFAULT_USAGE, DEFAULT_VIEW, SCHEMA_VERSION } from './store'
 import { drawPane } from './view/pane'
 
-const PANE = 'conductor'
+const PANE = 'conductor-mod'
 const TITLE = 'Conductor'
 const PANE_COLUMNS = 66
-const metaState = atom({ plugin: 'conductor', key: 'meta' } as const, { schemaVersion: SCHEMA_VERSION })
-const mainState = atom({ plugin: 'conductor', key: 'main' } as const, DEFAULT_MAIN)
-const usageState = atom({ plugin: 'conductor', key: 'usage' } as const, DEFAULT_USAGE)
-const architectState = atom({ plugin: 'conductor', key: 'architect' } as const, DEFAULT_ARCHITECT)
-const gateState = atom({ plugin: 'conductor', key: 'gate' } as const, DEFAULT_GATE)
-const workersState = atom({ plugin: 'conductor', key: 'workers' } as const, [])
-const planState = atom({ plugin: 'conductor', key: 'plan' } as const, [])
-const runsState = atom({ plugin: 'conductor', key: 'runs' } as const, [])
-const logState = atom({ plugin: 'conductor', key: 'log' } as const, [])
-const turnState = atom({ plugin: 'conductor', key: 'turn' } as const, DEFAULT_TURN)
-const receiptState = atom({ plugin: 'conductor', key: 'receipt' } as const, null)
-const viewState = atom({ plugin: 'conductor', key: 'view' } as const, DEFAULT_VIEW)
-const rosterState = atom({ plugin: 'conductor', key: 'roster' } as const, DEFAULT_ROSTER)
-const serversState = atom({ plugin: 'conductor', key: 'servers' } as const, [])
+const metaState = atom({ plugin: 'conductor-mod', key: 'meta' } as const, { schemaVersion: SCHEMA_VERSION })
+const mainState = atom({ plugin: 'conductor-mod', key: 'main' } as const, DEFAULT_MAIN)
+const usageState = atom({ plugin: 'conductor-mod', key: 'usage' } as const, DEFAULT_USAGE)
+const architectState = atom({ plugin: 'conductor-mod', key: 'architect' } as const, DEFAULT_ARCHITECT)
+const gateState = atom({ plugin: 'conductor-mod', key: 'gate' } as const, DEFAULT_GATE)
+const workersState = atom({ plugin: 'conductor-mod', key: 'workers' } as const, [])
+const planState = atom({ plugin: 'conductor-mod', key: 'plan' } as const, [])
+const runsState = atom({ plugin: 'conductor-mod', key: 'runs' } as const, [])
+const logState = atom({ plugin: 'conductor-mod', key: 'log' } as const, [])
+const turnState = atom({ plugin: 'conductor-mod', key: 'turn' } as const, DEFAULT_TURN)
+const receiptState = atom({ plugin: 'conductor-mod', key: 'receipt' } as const, null)
+const viewState = atom({ plugin: 'conductor-mod', key: 'view' } as const, DEFAULT_VIEW)
+const rosterState = atom({ plugin: 'conductor-mod', key: 'roster' } as const, DEFAULT_ROSTER)
+const serversState = atom({ plugin: 'conductor-mod', key: 'servers' } as const, [])
 
 type $ = EngineInterface
 type ServerBlock = { type: string; id?: string; name?: string; tool_use_id?: string }
@@ -102,7 +102,7 @@ async function safely($: $, hook: string, f: () => Promise<void>) {
   try {
     await f()
   } catch (err) {
-    await say($, 'conductor', failureLine(hook, err), 'error').catch(() => undefined)
+    await say($, 'conductor-mod', failureLine(hook, err), 'error').catch(() => undefined)
   }
 }
 
@@ -203,7 +203,7 @@ export const register: Register = (on, options) => {
   on('session.start', async ($, e, next) => {
     await safely($, 'session.start', async () => {
       await $.command.register({
-        name: 'conductor',
+        name: 'conductor-mod',
         description: 'Conductor pane: open, close, reset, or set the layout',
         argumentHint: '[open|close|reset|layout auto|hybrid|mini]',
       })
@@ -226,31 +226,31 @@ export const register: Register = (on, options) => {
     return next(e)
   })
 
-  on('command.run', { command: 'conductor' }, async ($, e) => {
+  on('command.run', { command: 'conductor-mod' }, async ($, e) => {
     try {
       const [verb = 'open', arg = ''] = e.args.trim().split(/\s+/)
       if (verb === 'close') {
         await $.ui.close({ id: PANE })
-        return { text: 'Conductor closed.' }
+        return { text: 'conductor-mod closed.' }
       }
       if (verb === 'reset') {
         await resetAll($)
         await refreshStatus($, cfg)
-        return { text: 'Conductor reset.' }
+        return { text: 'conductor-mod reset.' }
       }
       if (verb === 'layout') {
         const layout: Layout | null = arg === 'auto' || arg === 'hybrid' || arg === 'mini' ? arg : null
-        if (!layout) return { text: 'Usage: /conductor layout auto|hybrid|mini' }
+        if (!layout) return { text: 'Usage: /conductor-mod layout auto|hybrid|mini' }
         await update($, viewState, v => ({ ...normalize(DEFAULT_VIEW, v), layout }))
       }
       const opened = await openPane($)
       return {
         text: opened.isPlaced
-          ? 'Conductor open. In the hybrid layout, focus it with ctrl+x tab; 1-8 expand workers, f/s/o open the file/shell/other permission rows.'
-          : `Conductor is not shown yet: ${opened.reason}`,
+          ? 'conductor-mod open. In the hybrid layout, focus it with ctrl+x tab; 1-8 expand workers, f/s/o open the file/shell/other permission rows.'
+          : `conductor-mod is not shown yet: ${opened.reason}`,
       }
     } catch (err) {
-      return { text: `Conductor failed: ${shorten(err instanceof Error ? err.message : String(err), 80)}` }
+      return { text: `conductor-mod failed: ${shorten(err instanceof Error ? err.message : String(err), 80)}` }
     }
   })
 

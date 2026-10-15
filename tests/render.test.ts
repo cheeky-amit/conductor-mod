@@ -618,9 +618,9 @@ test('a fresh session inline draws the progress line and the orchestrator line',
   await ui.unmount()
 })
 
-test('/conductor layout mini forces the mini layout when docked', async ($, on) => {
+test('/conductor-mod layout mini forces the mini layout when docked', async ($, on) => {
   engine(on)
-  await $.command.run({ command: 'conductor', args: 'layout mini' } as never)
+  await $.command.run({ command: 'conductor-mod', args: 'layout mini' } as never)
   const ui = await $.ui.mount({ ...pane(120), surface: 'terminal' })
   expect(await ui.find({ text: /ORCHESTRATOR/ })).toBeUndefined()
   expect(await ui.find({ text: /no plan yet/ })).toBeDefined()
@@ -630,7 +630,7 @@ test('/conductor layout mini forces the mini layout when docked', async ($, on) 
 test('layout hybrid forces hybrid on a docked pane, even under 40 columns, but inline is always mini', async ($, on) => {
   engine(on)
   await fanOut($, on, ['claude-sonnet-5-5', 'claude-sonnet-5-5', 'claude-sonnet-5-5', 'claude-sonnet-5-5', 'claude-sonnet-5-5'])
-  await $.command.run({ command: 'conductor', args: 'layout hybrid' } as never)
+  await $.command.run({ command: 'conductor-mod', args: 'layout hybrid' } as never)
   const narrow = await $.ui.mount({ ...pane(30), surface: 'terminal' })
   expect(await narrow.find({ text: /ORCHESTRATOR/ })).toBeDefined()
   await narrow.unmount()
@@ -639,7 +639,7 @@ test('layout hybrid forces hybrid on a docked pane, even under 40 columns, but i
   expect(await inline.find({ text: /ORCHESTRATOR/ })).toBeUndefined()
   expect(await inline.find({ text: /session log/ })).toBeUndefined()
   await inline.unmount()
-  await $.command.run({ command: 'conductor', args: 'layout auto' } as never)
+  await $.command.run({ command: 'conductor-mod', args: 'layout auto' } as never)
   const auto = await $.ui.mount({ ...pane(30), surface: 'terminal' })
   expect(await auto.find({ text: /ORCHESTRATOR/ })).toBeUndefined()
   await auto.unmount()
@@ -659,7 +659,7 @@ test('a mini worker line leads with W<n>, ⚠ when flagged, its tier and its fam
   await ui.unmount()
 })
 
-test('"+n more" points to /conductor layout hybrid only where that brings hybrid back', async ($, on) => {
+test('"+n more" points to /conductor-mod layout hybrid only where that brings hybrid back', async ($, on) => {
   engine(on)
   await fanOut($, on, ['claude-sonnet-5-5', 'claude-sonnet-5-5', 'claude-sonnet-5-5', 'claude-sonnet-5-5'])
   const inline = await $.ui.mount({ ...pane(80, 'inline'), surface: 'terminal' })
@@ -668,9 +668,9 @@ test('"+n more" points to /conductor layout hybrid only where that brings hybrid
   const narrow = await $.ui.mount({ ...pane(30), surface: 'terminal' })
   expect(await narrow.find({ text: /^\+1 more$/ })).toBeDefined()
   await narrow.unmount()
-  await $.command.run({ command: 'conductor', args: 'layout mini' } as never)
+  await $.command.run({ command: 'conductor-mod', args: 'layout mini' } as never)
   const docked = await $.ui.mount({ ...pane(80), surface: 'terminal' })
-  expect(await docked.find({ text: /^\+1 more · \/conductor layout hybrid$/ })).toBeDefined()
+  expect(await docked.find({ text: /^\+1 more · \/conductor-mod layout hybrid$/ })).toBeDefined()
   await docked.unmount()
 })
 

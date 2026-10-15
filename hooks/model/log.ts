@@ -53,8 +53,8 @@ const reasonOf = (err: unknown) => (err instanceof Error ? err.message : String(
 /** The log row a failed hook leaves: which hook and why, with credentials masked and the reason cut to 80. */
 export const failureLine = (hook: string, err: unknown) => `${hook} failed: ${shorten(redact(reasonOf(err)), 80)}`
 
-/** The one row a pane that cannot be drawn shows: the reason masked and cut so the row fits the pane (33 cells at least). */
+/** The one row a pane that cannot be drawn shows: the reason masked and cut so the row fits the pane (37 cells at least). */
 export const renderFailure = (err: unknown, columns: number) => {
-  const lead = 'conductor render failed: '
+  const lead = 'conductor-mod render failed: '
   return `${lead}${shorten(redact(reasonOf(err)), Math.max(lead.length + 8, columns) - lead.length)}`
 }

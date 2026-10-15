@@ -1,6 +1,6 @@
 import { expect, mock, test } from 'claude-code/testing'
 
-import { agentCalls, callTool, engine, pane, spawn } from './fixtures'
+import { agentCalls, callTool, type Drawn, engine, logRows, pane, spawn, textOf } from './fixtures'
 
 test('tasks drive the progress row: %, done/total and ETA after the first finish', async ($, on) => {
   const clock = engine(on)
@@ -179,19 +179,37 @@ test('a pane that cannot be drawn says so in one row instead of throwing', async
   await ui.unmount()
   isBroken = true
   const failed = await $.ui.mount({ ...pane(60), surface: 'terminal' })
-  const row = await failed.find({ text: /conductor render failed: / })
+  const row = await failed.find({ text: /conductor-mod render failed: / })
   expect(row).toBeDefined()
   expect(String(row?.text).length).toBeLessThanOrEqual(60)
   await failed.unmount()
 })
 
-test('a store or engine failure inside /conductor comes back as text, not an exception', async ($, on) => {
+test('a store or engine failure inside /conductor-mod comes back as text, not an exception', async ($, on) => {
   engine(on)
   on('ui.close', () => {
     throw new Error('pane host gone')
   })
-  const out = await $.command.run({ command: 'conductor', args: 'close' } as never)
-  expect((out as { text?: string }).text).toMatch(/^Conductor failed: /)
+  const out = await $.command.run({ command: 'conductor-mod', args: 'close' } as never)
+  expect((out as { text?: string }).text).toMatch(/^conductor-mod failed: /)
+})
+
+test('a failed hook leaves a log row whose label column is wide enough for conductor-mod, with a gap before the text', async ($, on) => {
+  let calls = 0
+  on('clock.now', () => {
+    calls += 1
+    if (calls === 1) throw new Error('clock unavailable')
+    return { value: 1000 }
+  })
+  on('ui.status', () => ({ value: undefined }))
+  on('turn.start', (_$, e) => ({ turnId: e.turnId }))
+  await $.turn.start({ text: 'go', turnId: 'F1' })
+  const ui = await $.ui.mount({ ...pane(60), surface: 'terminal' })
+  const row = logRows(await ui.drawn()).find(r => /^conductor-mod/.test(textOf(r.children?.[1] as Drawn)))
+  expect(textOf(row?.children?.[2] as Drawn)).toMatch(/^turn\.start failed: /)
+  const label = row?.children?.[1] as Exclude<Drawn, string>
+  expect(Number(label.props?.width)).toBeGreaterThan('conductor-mod'.length)
+  await ui.unmount()
 })
 
 test('a credential in an architect agent type is redacted before it reaches the log', async ($, on) => {
@@ -243,14 +261,14 @@ test('a server call that was denied is not recorded', async ($, on) => {
   await ui.unmount()
 })
 
-test('/conductor reset and /clear forget the servers', async ($, on) => {
+test('/conductor-mod reset and /clear forget the servers', async ($, on) => {
   engine(on)
   on('tool.call', () => ({ result: {}, text: 'Command running in background with ID: rs1abc' }))
   await callTool($, { tool: 'Bash', command: 'pnpm dev --port 3300', run_in_background: true, tool_use_id: 'rs1' })
   let ui = await $.ui.mount({ ...pane(80), surface: 'terminal' })
   expect(await ui.find({ text: /:3300/ })).toBeDefined()
   await ui.unmount()
-  await $.command.run({ command: 'conductor', args: 'reset' } as never)
+  await $.command.run({ command: 'conductor-mod', args: 'reset' } as never)
   ui = await $.ui.mount({ ...pane(80), surface: 'terminal' })
   expect(await ui.find({ text: /:3300/ })).toBeUndefined()
   await ui.unmount()

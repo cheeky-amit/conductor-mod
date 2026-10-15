@@ -99,7 +99,7 @@ export type Server = {
 
 declare module 'claude-code' {
   interface PluginState {
-    conductor: {
+    'conductor-mod': {
       meta: { schemaVersion: number }
       main: Main
       usage: Usage

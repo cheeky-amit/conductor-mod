@@ -1,10 +1,11 @@
-# conductor
+# conductor-mod
 
 Claude Code mod: live pane for orchestrated sessions (plan % + ETA, orchestrator + tiered workers,
 workflow phases, local servers, context alarm, gate/architect/log). Spec + plan live in rea-lab:
 `docs/superpowers/specs/2026-10-14-conductor-design.md`, `docs/superpowers/plans/2026-10-14-conductor.md`.
 
 ## Develop
+- The plugin and its slash command are `conductor-mod` (install id `conductor-mod@conductor-mod`). The folder (`~/Projects/conductor`) and the display name "Conductor" keep the short name. The name appears as the `plugin` literal in every atom, the key in `types/index.d.ts` `PluginState`, the pane id (also the `ui.render` `requestId`), the command and `tests/fixtures.ts`; rename them together.
 - `claude --plugin-dir ~/Projects/conductor` — load it; edits under hooks/ hot-reload at end of turn.
 - `claude plugin validate .` · `claude plugin test .` · `npx -p typescript tsc -p .` (after first load writes .claude-plugin/types/) · `npx @biomejs/biome check .`
 
@@ -15,7 +16,7 @@ workflow phases, local servers, context alarm, gate/architect/log). Spec + plan 
 - `hooks/register.tsx` is the one hooks module: the atoms (one literal const each, `mainState`, `workersState`, `serversState`, ...), the local `$` helpers (`getX($)`, `say`, `safely`, `resetAll`, `migrate`, `refreshStatus`) and every hook. It is long on purpose (see Engine rules).
 - `hooks/view/` one panel per file, drawn from plain data and `els`; nothing there takes `$`. A press handler is built in register.tsx (`expandOnPress`, `gateOnPress`) and handed in as a callback (`PaneProps.onExpand`, `PaneProps.onGate`). Every strip row is budgeted in cells (`fitSegments`, `gateLayout`, `archLine`, `receiptFit`, `serverTail` in `hooks/model/`), so none passes the pane's width.
   - `kit.ts` the shared types (`Els`, `Kit`, `PaneData`) every panel is drawn from.
-  - `pane.tsx` composes the panels and picks the layout: mini always inline above the prompt, on any docked pane under 40 columns unless `layout` is hybrid, and everywhere when `layout` is mini (`/conductor layout auto|hybrid|mini`). Mini draws down to 20 columns; hybrid never under 40.
+  - `pane.tsx` composes the panels and picks the layout: mini always inline above the prompt, on any docked pane under 40 columns unless `layout` is hybrid, and everywhere when `layout` is mini (`/conductor-mod layout auto|hybrid|mini`). Mini draws down to 20 columns; hybrid never under 40.
   - `progress.tsx` the progress row and the now/next row.
   - `tree.tsx` the orchestrator box, worker boxes/rows, the expanded worker and the tiers row.
   - `strips.tsx` the plan, workflow, architect and gate rows (the gate's drill-down too).

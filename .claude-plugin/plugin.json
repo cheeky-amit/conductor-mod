@@ -1,5 +1,5 @@
 {
-  "name": "conductor",
+  "name": "conductor-mod",
   "version": "1.0.0",
   "description": "Conductor: a live pane for orchestrated Claude Code sessions",
   "author": { "name": "Amit Kolton" },

@@ -89,7 +89,7 @@ const workerLine = (k: Kit, w: Worker, W: number) => {
 
 /**
  * Progress, now/next, the orchestrator, up to 3 workers, `+n more`, the last log line: 8 rows at most. A panel the person switched
- * off in `panels` is not drawn here either. `canSwitch` is whether `/conductor layout hybrid` would bring the hybrid layout back.
+ * off in `panels` is not drawn here either. `canSwitch` is whether `/conductor-mod layout hybrid` would bring the hybrid layout back.
  */
 export const drawMini = (
   k: Kit,
@@ -104,7 +104,7 @@ export const drawMini = (
   const live = on('crew') ? drawOrder(d.workers).slice(0, MINI_WORKERS) : []
   const more = on('crew') ? d.workers.length - live.length : 0
   const moreText = `+${more} more`
-  const hint = `${moreText} · /conductor layout hybrid`
+  const hint = `${moreText} · /conductor-mod layout hybrid`
   const last = on('log') ? d.log[d.log.length - 1] : undefined
   return (
     <Box flexDirection="column" width={W}>

@@ -12,9 +12,9 @@ export const engine = (on: On) => {
 }
 
 export const pane = (bodyColumns: number, placement: 'dock' | 'inline' = 'dock') => ({
-  plugin: 'conductor',
+  plugin: 'conductor-mod',
   component: 'Pane' as const,
-  requestId: 'conductor',
+  requestId: 'conductor-mod',
   props: { title: 'Conductor', isFocused: true, bodyColumns, placement, scroll: { offset: 0, bodyRows: 70 }, view: {} },
 })
 

@@ -19,7 +19,7 @@ export const receiptLine = (k: Kit, d: PaneData, W: number) => {
 }
 
 const TIME_W = 9
-const WHO_W = 11
+const WHO_W = 15
 
 export const logPanel = (k: Kit, d: PaneData, W: number, rows: number, viewed: string | null) => {
   const { Box, Text } = k.els

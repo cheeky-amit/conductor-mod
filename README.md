@@ -24,19 +24,25 @@ passes through unchanged.
 
 ```
 claude plugin marketplace add ~/Projects/conductor
-claude plugin install conductor@conductor-local
+claude plugin install conductor-mod@conductor-mod
 /reload-plugins
-/conductor
+/conductor-mod
+```
+
+Or add the marketplace from GitHub instead of the folder:
+
+```
+claude plugin marketplace add cheeky-amit/conductor-mod
 ```
 
 ## Commands and keys
 
-- `/conductor open | close | reset | layout auto|hybrid|mini`
+- `/conductor-mod open | close | reset | layout auto|hybrid|mini`
 - In the hybrid layout, focus the pane with `ctrl+x tab`. Then `1`-`8` expand a worker, and `f` / `s` / `o` open the gate's file / shell / other permission checks. The mini layout has no keys.
 
 ## Configure
 
-Set these under `pluginConfigs["conductor"].options`, or with `/config`.
+Set these under `pluginConfigs["conductor-mod"].options`, or with `/config`.
 
 | Key | Default | What it does |
 |---|---|---|
