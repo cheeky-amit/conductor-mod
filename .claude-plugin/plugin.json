@@ -1,0 +1,80 @@
+{
+  "name": "conductor",
+  "version": "1.0.0",
+  "description": "Conductor: a live pane for orchestrated Claude Code sessions",
+  "author": { "name": "Amit Kolton" },
+  "license": "MIT",
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "tiers": {
+      "title": "Tiers",
+      "description": "Comma-separated TIER=regex (case-insensitive) mapping models to T0-T3",
+      "type": "string",
+      "default": "T0=haiku,T1=sonnet,T2=opus,T3=fable|mythos"
+    },
+    "prices": {
+      "title": "Prices (est)",
+      "description": "Comma-separated regex=input/output/cacheRead in $ per 1M tokens, for estimates only",
+      "type": "string",
+      "default": "fable|mythos=10/50/0.25,opus=4/20/0.2,sonnet=2/10/0.2,haiku=1/5/0.1"
+    },
+    "contextAmber": {
+      "title": "Context amber %",
+      "description": "Context gauge turns amber at this percent",
+      "type": "number",
+      "default": 70
+    },
+    "contextRed": {
+      "title": "Context red %",
+      "description": "Context gauge turns red and says 'checkpoint now' at this percent",
+      "type": "number",
+      "default": 80
+    },
+    "panels": {
+      "title": "Panels",
+      "description": "Comma-separated, in order: progress, crew, plan, workflow, servers, architect, gate, log",
+      "type": "string",
+      "default": "progress,crew,plan,workflow,servers,architect,gate,log"
+    },
+    "layout": {
+      "title": "Layout",
+      "description": "auto: mini inline above the prompt or under 40 columns, hybrid otherwise. hybrid: hybrid on every docked pane (inline above the prompt is always mini, 8 rows). mini: mini everywhere",
+      "type": "string",
+      "options": ["auto", "hybrid", "mini"],
+      "default": "auto"
+    },
+    "maxBoxes": {
+      "title": "Worker boxes",
+      "description": "Worker boxes side by side before they fold into rows (1-6)",
+      "type": "number",
+      "default": 3
+    },
+    "architectPattern": {
+      "title": "Architect pattern",
+      "description": "Case-insensitive regex for agent types and server tools that count as the architect",
+      "type": "string",
+      "default": "advisor|architect"
+    },
+    "architectLabel": {
+      "title": "Architect label",
+      "description": "Name shown for the architect",
+      "type": "string",
+      "default": "ARCHITECT"
+    },
+    "gateLabel": { "title": "Gate label", "description": "Name shown for the permission strip", "type": "string", "default": "GATE" },
+    "palette": {
+      "title": "Palette",
+      "description": "theme follows your Claude Code theme; pastel is fixed colours for dark terminals",
+      "type": "string",
+      "options": ["theme", "pastel"],
+      "default": "theme"
+    },
+    "openOnStart": { "title": "Open on start", "description": "Open the pane when a session starts", "type": "boolean", "default": true },
+    "statusLine": {
+      "title": "Status line",
+      "description": "Show progress, ETA, context, running workers, flags and live servers in the status line",
+      "type": "boolean",
+      "default": true
+    }
+  }
+}

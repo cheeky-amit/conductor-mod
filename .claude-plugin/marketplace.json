@@ -1,0 +1,6 @@
+{
+  "name": "conductor-local",
+  "metadata": { "description": "Conductor: plan progress, orchestrator + tiered workers, workflow phases, context alarm." },
+  "owner": { "name": "Amit Kolton" },
+  "plugins": [{ "name": "conductor", "source": "./", "description": "Live pane for orchestrated Claude Code sessions." }]
+}

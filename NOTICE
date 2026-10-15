@@ -1,0 +1,3 @@
+Conductor includes code ported from Flightdeck (https://github.com/scasella/claude-flightdeck),
+Copyright (c) 2026 Stephen Casella, used under the MIT License. Ported code is marked
+"Ported from Flightdeck v0.4.0" at the top of each file that contains it.
